@@ -19,9 +19,16 @@ def get_db_connection():
     return conn
 
 
+# Инициализация базы данных с абсолютным путем для сервера Render
 def init_db():
-    conn = get_db_connection()
-    # Старая таблица для постов
+    # Находим точную папку, где лежит app.py, и создаем базу прямо там
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(base_dir, app.config['DATABASE'])
+
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
+
+    # Создаем таблицу для постов
     conn.execute('''
         CREATE TABLE IF NOT EXISTS posts (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -30,7 +37,8 @@ def init_db():
             image_path TEXT NOT NULL
         )
     ''')
-    # НОВАЯ ТАБЛИЦА ДЛЯ ОЦЕНОК (добавьте этот блок ниже)
+
+    # Создаем таблицу для оценок
     conn.execute('''
         CREATE TABLE IF NOT EXISTS ratings (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -41,7 +49,16 @@ def init_db():
     conn.close()
 
 
+# Вызываем создание базы данных ДО запуска маршрутов
 init_db()
+
+
+def get_db_connection():
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(base_dir, app.config['DATABASE'])
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
+    return conn
 
 
 def allowed_file(filename):
@@ -50,13 +67,15 @@ def allowed_file(filename):
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    try:
+        return render_template('index.html')
+    except Exception as e:
+        return f"Error loading homepage: {str(e)}", 500
 
 
 @app.route('/volozhin', methods=['GET', 'POST'])
 def volozhin():
     conn = get_db_connection()
-
     if request.method == 'POST':
         title = request.form.get('title')
         description = request.form.get('description')
@@ -76,6 +95,7 @@ def volozhin():
     conn.close()
     return render_template('volozhin.html', posts=posts)
 
+
 @app.route('/landmarks')
 def landmarks():
     return render_template('landmarks.html')
@@ -89,21 +109,20 @@ def rate():
         if stars:
             conn.execute('INSERT INTO ratings (stars) VALUES (?)', (int(stars),))
             conn.commit()
+            conn.close()
             return redirect(url_for('rate'))
 
-    # Считаем среднюю оценку и общее количество проголосовавших
     stats = conn.execute('SELECT COUNT(*) as count, AVG(stars) as avg FROM ratings').fetchone()
     conn.close()
 
-    # Округляем среднюю оценку до 1 знака после запятой
     avg_rating = round(stats['avg'], 1) if stats['avg'] else 0
     total_votes = stats['count']
 
     return render_template('rate.html', avg_rating=avg_rating, total_votes=total_votes)
 
 
-
 if __name__ == '__main__':
     app.run(debug=True)
+
 
 
