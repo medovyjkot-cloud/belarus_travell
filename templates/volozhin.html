@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Volozhin City & Surroundings</h2>
+<p><strong>Volozhin</strong> is a charming town located on the Volozhinka River, about 76 km away from Minsk. Known since the 14th century, it was historical property of famous noble families: the Radziwills, the Czartoryskis, and the Counts Tyszkiewicz.</p>
+
+<h3>🏰 Key Historical Landmarks</h3>
+
+<!-- Блок с карточками основных достопримечательностей (Локальные картинки) -->
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-bottom: 30px;">
+
+    <!-- Карточка 1: Дворец Тышкевичей -->
+    <div style="border: 1px solid #e0e0e0; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+        <img src="{{ url_for('static', filename='images/palace.jpg') }}" alt="Tyszkiewicz Palace" style="width: 100%; height: 200px; object-fit: cover;">
+        <div style="padding: 15px;">
+            <h4 style="margin: 0 0 10px 0; color: #2c3e50;">Tyszkiewicz Palace Complex</h4>
+            <p style="margin: 0; color: #666; font-size: 0.9rem; line-height: 1.4;">A monument of classicist architecture from the early 19th century, which once included a palace, a greenhouse, and a beautiful English park.</p>
+        </div>
+    </div>
+
+    <!-- Карточка 2: Костел Святого Иосифа -->
+    <div style="border: 1px solid #e0e0e0; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+        <img src="{{ url_for('static', filename='images/church.jpg') }}" alt="St. Joseph's Church" style="width: 100%; height: 200px; object-fit: cover;">
+        <div style="padding: 15px;">
+            <h4 style="margin: 0 0 10px 0; color: #2c3e50;">St. Joseph's Church</h4>
+            <p style="margin: 0; color: #666; font-size: 0.9rem; line-height: 1.4;">A grand Neoclassical Catholic church built in 1816. It features a majestic portico with six columns and statues of the Evangelists.</p>
+        </div>
+    </div>
+
+    <!-- Карточка 3: Иешива -->
+    <div style="border: 1px solid #e0e0e0; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+        <img src="{{ url_for('static', filename='images/yeshiva.jpg') }}" alt="Volozhin Yeshiva" style="width: 100%; height: 200px; object-fit: cover;">
+        <div style="padding: 15px;">
+            <h4 style="margin: 0 0 10px 0; color: #2c3e50;">Volozhin Yeshiva</h4>
+            <p style="margin: 0; color: #666; font-size: 0.9rem; line-height: 1.4;">The world-renowned Jewish theological seminary, known as the "Mother of Yeshivas," opened in 1803. It attracted students from all over the globe.</p>
+        </div>
+    </div>
+
+</div>
+
+</div>
+
+<h3>📜 Legends of Volozhin</h3>
+<div style="background-color: #f9f9f9; padding: 15px; border-left: 5px solid #1abc9c; font-style: italic; margin-bottom: 20px;">
+    <h4>The Legend of Tyszkiewicz's Underground Tunnels</h4>
+    <p>Local folklore says that a huge network of secret underground labyrinths is hidden beneath the Volozhin Palace. According to the legend, one of the main tunnels was so wide that Count Tyszkiewicz could easily ride through it in a carriage drawn by three horses. It is believed that this path led several kilometers outside the town directly to the family chapel, and priceless treasures are still buried somewhere inside its walls.</p>
+</div>
+
+<hr>
+
+<h3>📸 Share Your Landmark</h3>
+<p>Have you been to Volozhin? Upload your photo and add a story to it!</p>
+
+<!-- Форма для загрузки пользовательских картинок (остается рабочей) -->
+<form action="{{ url_for('volozhin') }}" method="POST" enctype="multipart/form-data" style="background: #f4f7f6; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
+    <div style="margin-bottom: 15px;">
+        <label style="display:block; margin-bottom: 5px; font-weight: bold;">Place Title / Photo Name:</label>
+        <input type="text" name="title" placeholder="e.g., Gates of Tyszkiewicz Estate" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+    </div>
+
+    <div style="margin-bottom: 15px;">
+        <label style="display:block; margin-bottom: 5px; font-weight: bold;">Description or your story:</label>
+        <textarea name="description" rows="3" placeholder="Tell us more about this place..." style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; resize: vertical;"></textarea>
+    </div>
+
+    <div style="margin-bottom: 15px;">
+        <label style="display:block; margin-bottom: 5px; font-weight: bold;">Choose a photo:</label>
+        <input type="file" name="photo" accept="image/*" required>
+    </div>
+
+    <button type="submit" class="btn">Publish Post</button>
+</form>
+
+<h3>🗺️ Travelers' Gallery & Reviews</h3>
+<!-- Сюда будут падать картинки, которые загружают обычные пользователи -->
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
+    {% if posts %}
+        {% for post in posts %}
+            <div style="border: 1px solid #e0e0e0; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; flex-direction: column;">
+                <img src="{{ url_for('static', filename='uploads/' + post.image_path) }}" alt="{{ post.title }}" style="width: 100%; height: 200px; object-fit: cover;">
+                <div style="padding: 15px; flex-grow: 1;">
+                    <h4 style="margin: 0 0 10px 0; color: #2c3e50;">{{ post.title }}</h4>
+                    <p style="margin: 0; color: #666; font-size: 0.9rem; line-height: 1.4;">{{ post.description }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p style="color: #666; grid-column: 1/-1;">No posts yet. Be the first to share your story!</p>
+    {% endif %}
+</div>
+{% endblock %}
+
+

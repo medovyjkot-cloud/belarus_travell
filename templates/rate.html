@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="text-align: center; max-width: 600px; margin: 0 auto; padding: 20px;">
+    <h2>Site Rating</h2>
+
+    <p style="font-size: 1.3rem; color: #2c3e50; font-weight: bold; margin-bottom: 30px; background: #eef8f6; padding: 15px; border-radius: 8px;">
+        Evgenia Anatolievna, how would you rate this site?
+    </p>
+
+    <!-- Форма отправки звезд -->
+    <form action="{{ url_for('rate') }}" method="POST" style="margin-bottom: 40px;">
+        <div style="display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; flex-wrap: wrap;">
+            {% for i in range(1, 11) %}
+                <label style="cursor: pointer; background: #fff; border: 2px solid #1abc9c; padding: 10px 15px; border-radius: 5px; font-weight: bold; transition: 0.2s;">
+                    <input type="radio" name="stars" value="{{ i }}" required style="margin-right: 5px;">
+                    {{ i }} ★
+                </label>
+            {% endfor %}
+        </div>
+        <button type="submit" class="btn" style="font-size: 1.1rem; padding: 12px 30px;">Submit Rating</button>
+    </form>
+
+    <hr style="border: 0; border-top: 1px solid #ddd; margin: 40px 0;">
+<!-- Небольшой скрипт, чтобы подсвечивать выбранную цифру -->
+<script>
+    const labels = document.querySelectorAll('label');
+    labels.forEach(label => {
+        label.addEventListener('click', () => {
+            labels.forEach(l => l.style.background = '#fff');
+            label.style.background = '#1abc9c';
+            label.style.color = '#fff';
+        });
+    });
+</script>
+{% endblock %}

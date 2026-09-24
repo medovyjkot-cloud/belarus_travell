@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Famous Landmarks of Belarus</h2>
+<p>Explore the most iconic historical sites, majestic castles, and hero monuments that define the rich heritage of Belarus.</p>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-top: 20px;">
+
+    <!-- Карточка 1: Мирский замок -->
+    <div style="border: 1px solid #e0e0e0; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+        <img src="{{ url_for('static', filename='images/mir.jpg') }}" alt="Mir Castle" style="width: 100%; height: 200px; object-fit: cover;" onerror="this.src='https://wikimedia.org'">
+        <div style="padding: 15px;">
+            <h4 style="margin: 0 0 10px 0; color: #2c3e50;">Mir Castle Complex</h4>
+            <p style="margin: 0; color: #666; font-size: 0.9rem; line-height: 1.4;">A UNESCO World Heritage site and an outstanding example of 16th-century fortification architecture. It beautifully combines Gothic, Renaissance, and Baroque styles.</p>
+        </div>
+    </div>
+
+    <!-- Карточка 2: Брестская крепость -->
+    <div style="border: 1px solid #e0e0e0; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+        <img src="{{ url_for('static', filename='images/brest.jpg') }}" alt="Brest Fortress" style="width: 100%; height: 200px; object-fit: cover;" onerror="this.src='https://wikimedia.org'">
+        <div style="padding: 15px;">
+            <h4 style="margin: 0 0 10px 0; color: #2c3e50;">Brest Hero-Fortress</h4>
+            <p style="margin: 0; color: #666; font-size: 0.9rem; line-height: 1.4;">A world-famous symbol of Soviet resistance during World War II. The memorial complex features the colossal "Courage" monument and the iconic main entrance shaped like a star.</p>
+        </div>
+    </div>
+
+    <!-- Карточка 3: Несвижский замок -->
+    <div style="border: 1px solid #e0e0e0; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+        <img src="{{ url_for('static', filename='images/nesvizh.jpg') }}" alt="Nesvizh Castle" style="width: 100%; height: 200px; object-fit: cover;" onerror="this.src='https://wikimedia.org'">
+        <div style="padding: 15px;">
+            <h4 style="margin: 0 0 10px 0; color: #2c3e50;">Nesvizh Palace and Park</h4>
+            <p style="margin: 0; color: #666; font-size: 0.9rem; line-height: 1.4;">The residential castle of the Radziwill family, also protected by UNESCO. Surrounded by beautiful lakes and English landscape gardens, it is a true gem of Belarus.</p>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
